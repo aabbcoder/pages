@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bing Wallpaper</title>
+    <style>
+        .image-container {
+            margin-top: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start; /* 垂直方向上顶部对齐 */
+            margin-bottom: 20px;
+        }
+        .image-container a {
+            width: 30%;
+            display: block;
+            position: relative; /* 相对定位，用于定位标题 */
+        }
+        .image-container img {
+            width: 100%;
+            display: block;
+        }
+        .image-container p {
+            position: absolute; /* 绝对定位 */
+            top: 0; /* 顶部对齐 */
+            left: 0; /* 左对齐 */
+            background-color: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+            margin: 0; /* 清除默认外边距 */
+            padding: 5px; /* 添加内边距 */
+            width: 100%; /* 宽度100% */
+            box-sizing: border-box; /* 设置盒子模型为边框模型 */
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container" id="imageContainer">
+        <!-- Images will be appended here dynamically -->
+    </div>
+
+    <script>
+        // Function to fetch images from the API and display them
+        function fetchAndDisplayImages() {
+            fetch('https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth=1920&screenHeight=1080&env=live')
+                .then(response => response.json())
+                .then(data => {
+                    const images = data.images;
+                    const imageContainer = document.getElementById('imageContainer');
+
+                    // Clear existing images
+                    imageContainer.innerHTML = '';
+
+                    let row = document.createElement('div');
+                    row.className = 'row';
+                    imageContainer.appendChild(row);
+
+                    // Iterate through each image URL and create img element with link and title
+                    images.forEach((image, index) => {
+                        if (index > 0 && index % 3 === 0) {
+                            row = document.createElement('div');
+                            row.className = 'row';
+                            imageContainer.appendChild(row);
+                        }
+
+                        const imgLink = document.createElement('a');
+                        imgLink.href = image.url;
+                        imgLink.target = "_blank";
+
+                        const img = document.createElement('img');
+                        img.src = image.url;
+                        img.alt = 'Bing Wallpaper';
+                        
+                        imgLink.appendChild(img);
+                        row.appendChild(imgLink);
+
+                        // Create paragraph element for title
+                        const titlePara = document.createElement('p');
+                        titlePara.textContent = image.title;
+                        imgLink.appendChild(titlePara);
+                    });
+                })
+                .catch(error => console.error('Error fetching images:', error));
+        }
+
+        // Call the function when the page loads
+        fetchAndDisplayImages();
+    </script>
+</body>
+</html>
