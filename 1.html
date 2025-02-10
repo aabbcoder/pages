@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>赛博坦拯救之旅</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #e6e6e6;
+            font-family: "Arial", sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #00ccff;
+        }
+        #story {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .option {
+            display: block;
+            background-color: #333333;
+            color: #e6e6e6;
+            text-decoration: none;
+            padding: 15px;
+            margin: 10px auto;
+            width: 80%;
+            border: 2px solid #00ccff;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .option:hover {
+            background-color: #00ccff;
+            color: #0d0d0d;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>赛博坦拯救之旅</h1>
+    <div id="story"></div>
+    <div id="options"></div>
+
+    <script>
+        const endings = [
+            "你展现出了<strong>一鸣惊人</strong>的才能，赛博坦的未来因你而光明！",
+            "你的智慧真是<strong>妙笔生花</strong>，全体博派都为你喝彩！",
+            "你就像<strong>聪明伶俐</strong>的小英雄，擎天柱为你点赞！",
+            "你的勇气让人<strong>赞不绝口</strong>，赛博坦的和平由你守护！",
+            "你完成了使命，真是<strong>功不可没</strong>！"
+        ];
+
+        // 题库：包含50道题目（此处略过题目的具体代码，请使用您已有的题库）
+
+const questionBank = [
+    { question: "45 + 28 = ?", correct: "73", wrong: ["63", "83"] },
+    { question: "64 ÷ 8 = ?", correct: "8", wrong: ["7", "6"] },
+    { question: "92 - 37 = ?", correct: "55", wrong: ["65", "45"] },
+    { question: "7 × 6 = ?", correct: "42", wrong: ["36", "48"] },
+    { question: "81 ÷ 9 = ?", correct: "9", wrong: ["8", "7"] },
+    { question: "58 + 24 = ?", correct: "82", wrong: ["72", "68"] },
+    { question: "9 × 7 = ?", correct: "63", wrong: ["56", "72"] },
+    { question: "100 - 45 = ?", correct: "55", wrong: ["45", "65"] },
+    { question: "36 ÷ 4 = ?", correct: "9", wrong: ["8", "6"] },
+    { question: "8 × 8 = ?", correct: "64", wrong: ["56", "72"] },
+    { question: "77 - 29 = ?", correct: "48", wrong: ["58", "38"] },
+    { question: "25 + 37 = ?", correct: "62", wrong: ["52", "72"] },
+    { question: "54 ÷ 6 = ?", correct: "9", wrong: ["7", "8"] },
+    { question: "6 × 9 = ?", correct: "54", wrong: ["64", "44"] },
+    { question: "88 - 33 = ?", correct: "55", wrong: ["66", "44"] },
+    { question: "47 + 26 = ?", correct: "73", wrong: ["63", "83"] },
+    { question: "72 ÷ 8 = ?", correct: "9", wrong: ["8", "7"] },
+    { question: "9 × 5 = ?", correct: "45", wrong: ["35", "55"] },
+    { question: "69 - 24 = ?", correct: "45", wrong: ["35", "55"] },
+    { question: "33 + 49 = ?", correct: "82", wrong: ["72", "92"] },
+    { question: "56 ÷ 7 = ?", correct: "8", wrong: ["7", "9"] },
+    { question: "8 × 7 = ?", correct: "56", wrong: ["48", "64"] },
+    { question: "95 - 18 = ?", correct: "77", wrong: ["87", "67"] },
+    { question: "29 + 53 = ?", correct: "82", wrong: ["72", "92"] },
+    { question: "81 ÷ 9 = ?", correct: "9", wrong: ["8", "7"] },
+    { question: "7 × 8 = ?", correct: "56", wrong: ["48", "64"] },
+    { question: "100 - 28 = ?", correct: "72", wrong: ["82", "62"] },
+    { question: "66 ÷ 6 = ?", correct: "11", wrong: ["10", "12"] },
+    { question: "6 × 7 = ?", correct: "42", wrong: ["36", "48"] },
+    { question: "84 - 39 = ?", correct: "45", wrong: ["55", "35"] },
+    { question: "37 + 48 = ?", correct: "85", wrong: ["75", "95"] },
+    { question: "63 ÷ 7 = ?", correct: "9", wrong: ["7", "8"] },
+    { question: "9 × 8 = ?", correct: "72", wrong: ["64", "81"] },
+    { question: "71 - 29 = ?", correct: "42", wrong: ["52", "32"] },
+    { question: "28 + 57 = ?", correct: "85", wrong: ["75", "95"] },
+    { question: "48 ÷ 6 = ?", correct: "8", wrong: ["7", "9"] },
+    { question: "8 × 9 = ?", correct: "72", wrong: ["64", "81"] },
+    { question: "93 - 47 = ?", correct: "46", wrong: ["56", "36"] },
+    { question: "39 + 44 = ?", correct: "83", wrong: ["73", "93"] },
+    { question: "72 ÷ 9 = ?", correct: "8", wrong: ["7", "9"] },
+    { question: "7 × 9 = ?", correct: "63", wrong: ["54", "72"] },
+    { question: "89 - 26 = ?", correct: "63", wrong: ["53", "73"] },
+    { question: "46 + 27 = ?", correct: "73", wrong: ["63", "83"] },
+    { question: "54 ÷ 9 = ?", correct: "6", wrong: ["7", "8"] },
+    { question: "6 × 8 = ?", correct: "48", wrong: ["38", "58"] },
+    { question: "78 - 39 = ?", correct: "39", wrong: ["49", "29"] },
+    { question: "59 + 36 = ?", correct: "95", wrong: ["85", "105"] },
+    { question: "81 ÷ 3 = ?", correct: "27", wrong: ["26", "28"] },
+    { question: "9 × 4 = ?", correct: "36", wrong: ["45", "27"] },
+    { question: "84 - 28 = ?", correct: "56", wrong: ["46", "66"] },
+    { question: "65 + 18 = ?", correct: "83", wrong: ["73", "93"] },
+    { question: "27 ÷ 3 = ?", correct: "9", wrong: ["8", "7"] },
+    { question: "7 × 5 = ?", correct: "35", wrong: ["25", "45"] },
+    { question: "68 - 23 = ?", correct: "45", wrong: ["35", "55"] },
+    { question: "52 + 19 = ?", correct: "71", wrong: ["61", "81"] }
+];
+
+
+        let questions = []; // 存储本次游戏的10道题目
+        let currentQuestionIndex = 0;
+
+        // 正确回答后的故事情节数组，增加到15条
+        const correctStories = [
+            "能量塔启动了，继续前进！",
+            "你解开了防御系统，前进！",
+            "你救出了大黄蜂，他加入了你的队伍！",
+            "你选择了正确的路径，成功避开了陷阱！",
+            "威震天被你的智慧所震撼，继续挑战！",
+            "你发现了一条秘密通道，加快了行进速度！",
+            "擎天柱赞赏地看着你：'干得好，继续前进！'",
+            "你成功修复了通讯系统，与团队保持联系！",
+            "你破解了密码，打开了宝库的大门！",
+            "赛博坦的星空因你而更加闪耀！",
+            "你找到了一件强大的装备，提高了实力！",
+            "你躲过了霸天虎的埋伏，安全前进！",
+            "你激活了隐藏的能量场，保护了团队！",
+            "你的智慧让敌人措手不及，继续深入！",
+            "你救出了被困的同伴，他们加入了你的冒险！"
+        ];
+
+        // 回答错误时的重试提示，增加到15条
+        const incorrectPrompts = [
+            "答案不对，请再试一次！",
+            "再试试看，你一定能行！",
+            "别灰心，认真思考再来一次！",
+            "小提示：仔细计算会有帮助哦！",
+            "不要放弃，再接再厉！",
+            "加油！相信自己的能力！",
+            "再来一次，成功就在眼前！",
+            "深呼吸，冷静思考，再试一次！",
+            "你的团队需要你，继续努力！",
+            "重试一下，你一定能找到答案！",
+            "认真审题，再试一遍！",
+            "别急，慢慢来，思考一下！",
+            "没关系，失败是成功之母！",
+            "勇敢面对挑战，再试一次！",
+            "坚持就是胜利，不要放弃！"
+        ];
+
+        function getRandomQuestions() {
+            let shuffled = questionBank.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 10);
+        }
+
+        let scenes = {
+            start: {
+                text: "在一个星光闪烁的夜晚，你和四岁的孩子被传送到了赛博坦星球。擎天柱迎接你们：'赛博坦需要你的帮助！我们准备好开始冒险了吗？'",
+                options: [
+                    { text: "准备好了！出发！", action: startAdventure }
+                ]
+            }
+        };
+
+        function startAdventure() {
+            questions = getRandomQuestions();
+            currentQuestionIndex = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                let q = questions[currentQuestionIndex];
+                let options = [q.correct, ...q.wrong];
+                shuffle(options); // 随机排序选项
+                scenes.current = {
+                    text: "挑战 " + (currentQuestionIndex + 1) + "：" + q.question,
+                    options: options.map(option => {
+                        return {
+                            text: option,
+                            action: function() {
+                                if (option === q.correct) {
+                                    currentQuestionIndex++;
+                                    showStory(true);
+                                } else {
+                                    showStory(false);
+                                }
+                            }
+                        };
+                    })
+                };
+                showScene(scenes.current);
+            } else {
+                showEnding();
+            }
+        }
+
+        function showStory(correct) {
+            if (correct) {
+                // 正确回答，随机选择一条故事情节
+                let story = correctStories[Math.floor(Math.random() * correctStories.length)];
+                scenes.current = {
+                    text: story,
+                    options: [
+                        { text: "继续", action: showQuestion }
+                    ]
+                };
+            } else {
+                // 回答错误，随机选择一条提示
+                let prompt = incorrectPrompts[Math.floor(Math.random() * incorrectPrompts.length)];
+                scenes.current = {
+                    text: prompt,
+                    options: [
+                        { text: "重试", action: showQuestion }
+                    ]
+                };
+            }
+            showScene(scenes.current);
+        }
+
+        function showEnding() {
+            let praise = endings[Math.floor(Math.random() * endings.length)];
+            scenes.current = {
+                text: "你成功完成了所有挑战！" + praise,
+                options: [
+                    { text: "重新开始冒险", action: function() {
+                        showScene(scenes.start);
+                    } }
+                ]
+            };
+            showScene(scenes.current);
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function showScene(scene) {
+            let sceneText = typeof scene.text === 'function' ? scene.text() : scene.text;
+            document.getElementById('story').innerHTML = sceneText;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            let options = scene.options.slice();
+            shuffle(options); // 随机排序选项
+            options.forEach(option => {
+                const button = document.createElement('a');
+                button.className = 'option';
+                button.innerHTML = option.text;
+                button.href = '#';
+                button.onclick = function(e) {
+                    e.preventDefault();
+                    option.action();
+                };
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        // 开始游戏
+        showScene(scenes.start);
+    </script>
+
+</body>
+</html>
