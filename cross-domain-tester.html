@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>POST 跨域请求测试（结果输出到页面）</title>
+    <style>
+        /* 简单样式优化，让结果显示更清晰 */
+        .result {
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap; /* 保留换行和空格 */
+        }
+        .success {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+        .error {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>POST 跨域请求结果</h2>
+    <!-- 用于显示请求结果的容器 -->
+    <div id="resultContainer" class="result"></div>
+
+    <script>
+        // 目标接口地址（B站的 fees/pc 接口）
+        const targetUrl = 'https://cm.bilibili.com/cm/api/fees/pc';
+        // 结果显示容器
+        const resultContainer = document.getElementById('resultContainer');
+
+        // 发起 POST 跨域请求
+        fetch(targetUrl, {
+            method: 'POST', // 改为 POST 方法
+            mode: 'cors', // 跨域模式（浏览器默认，显式指定更清晰）
+            headers: {
+                'Content-Type': 'application/json', // 多数 POST 接口要求的格式
+                'Referer': 'https://www.bilibili.com/', // B站接口可能需要 Referer 验证（模拟正常访问）
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' // 模拟浏览器 UA
+            },
+            body: JSON.stringify({}) // POST 请求体（该接口可能不需要参数，传空对象即可）
+        })
+        .then(response => {
+            // 先判断响应状态是否成功（200-299）
+            if (!response.ok) {
+                throw new Error(`请求失败：状态码 ${response.status}（${response.statusText}）`);
+            }
+            return response.text(); // 按原需求解析为文本格式
+        })
+        .then(data => {
+            // 成功：输出到页面，添加成功样式
+            resultContainer.className = 'result success';
+            resultContainer.innerHTML = `✅ 请求成功！响应结果：\n\n${data}`;
+        })
+        .catch(error => {
+            // 失败：输出错误信息到页面，添加错误样式
+            resultContainer.className = 'result error';
+            resultContainer.innerHTML = `❌ 请求失败！错误信息：\n\n${error.message}`;
+            // 若需要同时在控制台显示详细错误，可保留这行
+            console.error('详细错误：', error);
+        });
+    </script>
+</body>
+</html>
