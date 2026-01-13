@@ -1,5 +1,3 @@
-### Link
-
 #### Bing 壁纸
 https://aabbcoder.github.io/pages/bingwallpaper.html
 
