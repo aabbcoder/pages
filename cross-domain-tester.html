@@ -21,10 +21,22 @@
             border-color: #f44336;
             background-color: #fff9f9;
         }
+        .ua-info {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #2196F3;
+            border-radius: 8px;
+            background-color: #f0f8ff;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
     <h2>POST 跨域请求结果</h2>
+    <!-- 显示当前浏览器UA的容器 -->
+    <div class="ua-info">
+        <span id="uaText"></span>
+    </div>
     <!-- 用于显示请求结果的容器 -->
     <div id="resultContainer" class="result"></div>
 
@@ -33,15 +45,21 @@
         const targetUrl = 'https://cm.bilibili.com/cm/api/fees/pc';
         // 结果显示容器
         const resultContainer = document.getElementById('resultContainer');
+        // UA显示容器
+        const uaText = document.getElementById('uaText');
 
-        // 发起 POST 跨域请求
+        // 1. 输出当前浏览器完整UA
+        const currentUA = navigator.userAgent;
+        uaText.textContent = currentUA;
+
+        // 2. 发起 POST 跨域请求
         fetch(targetUrl, {
             method: 'POST', // 改为 POST 方法
             mode: 'cors', // 跨域模式（浏览器默认，显式指定更清晰）
             headers: {
                 'Content-Type': 'application/json', // 多数 POST 接口要求的格式
                 'Referer': 'https://www.bilibili.com/', // B站接口可能需要 Referer 验证（模拟正常访问）
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' // 模拟浏览器 UA
+                'User-Agent': currentUA // 使用当前浏览器的真实UA
             },
             body: JSON.stringify({}) // POST 请求体（该接口可能不需要参数，传空对象即可）
         })
@@ -58,10 +76,14 @@
             resultContainer.innerHTML = `✅ 请求成功！响应结果：\n\n${data}`;
         })
         .catch(error => {
-            // 失败：输出错误信息到页面，添加错误样式
+            // 失败：输出错误信息 + 跨域解决方案提示
             resultContainer.className = 'result error';
-            resultContainer.innerHTML = `❌ 请求失败！错误信息：\n\n${error.message}`;
-            // 若需要同时在控制台显示详细错误，可保留这行
+            // 拼接错误信息和 --disable-web-security 提示
+            const errorMsg = `❌ 请求失败！错误信息：\n\n${error.message}\n\n` +
+                `💡 跨域解决方案：\n` +
+                `Chromium 开发版浏览器请尝试使用 --disable-web-security 参数启动，禁用同源策略进行测试。`;
+            resultContainer.innerHTML = errorMsg;
+            // 控制台显示详细错误（便于调试）
             console.error('详细错误：', error);
         });
     </script>
